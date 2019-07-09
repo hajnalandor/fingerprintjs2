@@ -4,13 +4,6 @@
     <HelloWorld msg="Welcome to Your Vue.js App"/>
 
 
-  <ul>
-  <li v-for="c in values">
-    {{ c }}
-    <p>joska</p>
-  </li>
-</ul>
-
 
   </div>
 </template>
@@ -43,9 +36,6 @@ export default {
   name: 'app',
   components: {
     HelloWorld
-  },
-  props: {
-    values: ["ANDOR","JOSKA"]
   }
 }
 

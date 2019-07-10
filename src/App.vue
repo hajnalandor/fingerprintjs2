@@ -31,9 +31,10 @@ export default {
     fingerPr += client.getCustomFingerprint(client.isMobile(),client.isMobileMajor(),client.isMobileAndroid(),client.isMobileOpera(),client.isMobileWindows(),client.isMobileBlackBerry()) + '-'
     fingerPr += client.getCustomFingerprint(client.getScreenPrint()) + '-'
     fingerPr += client.getCustomFingerprint(client.isJava(),client.isFlash(),client.getFlashVersion()) 
-    
-    console.log(fingerPr)
-
+    //encoded fingerPrint
+    console.log(btoa(fingerPr))
+    //decoded fingerPrint
+    console.log(atob(btoa(fingerPr)))
 
 
 

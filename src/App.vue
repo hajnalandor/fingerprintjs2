@@ -10,7 +10,6 @@
 
 
 <script>
-
 // @TODO typeingSpeed median
 // @TODO public ip
 var start = new Date().getTime()
@@ -21,6 +20,37 @@ var client = new ClientJS();
 
 var fingerPrintId = '';
 var fp = {};
+
+let httpGetIPAsync = (theUrl, callback) => {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() { 
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+            console.log(xmlHttp.responseText)
+            fp.privateIp = xmlHttp.responseText.substring(xmlHttp.responseText.indexOf(':')+2,xmlHttp.responseText.length -3);
+        }
+    }
+    xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+    xmlHttp.send(null);
+}
+httpGetIPAsync('https://api.ipify.org/?format=json',printIP);
+
+let printIP = (response) => {
+  console.log(response);
+}
+
+let httpGetGeoIPAsync = (theUrl, callback) => {
+  var xmlHttp = new XMLHttpRequest();
+  xmlHttp.onreadystatechange = function() {
+    if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+            console.log("ASD")
+            console.log(xmlHttp.responseText);
+        }
+  }
+  xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+  xmlHttp.send(null);
+}
+
+httpGetGeoIPAsync('https://json.geoiplookup.io/api', printIP);
 
 if (window.requestIdleCallback) {
     requestIdleCallback(function () {

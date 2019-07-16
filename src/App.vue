@@ -10,6 +10,9 @@
 
 
 <script>
+
+// @TODO typeingSpeed median
+// @TODO public ip
 var start = new Date().getTime()
 import HelloWorld from './components/HelloWorld.vue'
 import 'clientjs'
@@ -265,7 +268,6 @@ let getCustomFingerPr = (fp2comp) => {
      if (i < fp2comp.length - 1) {
        fingerPrintId += '-'
      }
-
    }
   } 
 

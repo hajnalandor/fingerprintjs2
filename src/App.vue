@@ -2,55 +2,210 @@
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
     <HelloWorld msg="Welcome to Your Vue.js App"/>
-   
-
+    <p>fingerPrintId</p>
+    <p>{{ fingerPrintId }}</p>
+    <p>canvasPrint</p>
+    <p>{{ canvasPrint }}</p>
+    <p>myCFP</p>    
+    <p>{{ myCFP }}</p>
 
   </div>
 </template>
 
-
 <script>
+import Vue from 'vue';
+
+let vm = new Vue({
+  data: {
+    fingerPrintId: '',
+    canvasPrint: '',
+    myCFP: ''
+  }
+})
+
 // @TODO typeingSpeed median
 // @TODO public ip
 var start = new Date().getTime()
 import HelloWorld from './components/HelloWorld.vue'
 import 'clientjs'
 import Fingerprint2 from 'fingerprintjs2'
+//import { GPU } from 'gpu.js';
+
 var client = new ClientJS();
 
 var fingerPrintId = '';
 var fp = {};
 
-let httpGetIPAsync = (theUrl, callback) => {
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() { 
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-            console.log(xmlHttp.responseText)
-            fp.privateIp = xmlHttp.responseText.substring(xmlHttp.responseText.indexOf(':')+2,xmlHttp.responseText.length -3);
-        }
-    }
-    xmlHttp.open("GET", theUrl, true); // true for asynchronous 
-    xmlHttp.send(null);
+//const gpu = new GPU();
+// Create the GPU accelerated function from a kernel
+// function that computes a single element in the
+// 512 x 512 matrix (2D array). The kernel function
+// is run in a parallel manner in the GPU resulting
+// in very fast computations! (...sometimes)
+// const matMult = gpu.createKernel(function(a, b) {
+//     var sum = 0;
+//     // for (var i = 0; i < 512; i++) {
+//     //     sum += a[this.thread.y][i] * b[i][this.thread.x];
+//     // }
+//     sum = Math.cos(a[0]) + Math.tan(b[0])
+//     return sum;
+// })
+// .setOutput([512, 512])
+//   .setOutputToTexture(true)
+ 
+// // Perform matrix multiplication on 2 matrices of size 512 x 512
+// let c = matMult([1,1], [-1.300,2]) ;
+// console.log(c);
+console.log("canvasprint");
+vm.canvasPrint = client.getCanvasPrint();
+let hash = 0;
+let char;
+for (let i = 0; i < vm.canvasPrint.length; i++) {
+    char = vm.canvasPrint.charCodeAt(i);
+		hash = ((hash<<5)-hash)+char;
+    hash = hash & hash; 
 }
-httpGetIPAsync('https://api.ipify.org/?format=json',printIP);
+console.log(hash);
 
-let printIP = (response) => {
-  console.log(response);
-}
+let canvasFP = () => {
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext('2d');
+    var txt = 'i9asdm..$#po((^@KbXrww!~cz|?#$%^<&*`I9ASDM..$#PO((^@kBxRWW!~CZ|?#$%^';
+    ctx.textBaseline = "top";
+    ctx.font = "25px 'Arial'";
+    ctx.textBaseline = "alphabetic";
+    ctx.rotate(.05);
+    ctx.fillStyle = "#f60";
+    ctx.fillRect(125,1,62,20);
+    ctx.fillStyle = "#069";
+    ctx.fillText(txt, 2, 15);
+    ctx.fillStyle = "rgba(102, 200, 0, 0.7)";
+    ctx.fillText(txt, 4, 17);
+    ctx.shadowBlur=10;
+    ctx.shadowColor="blue";
+    ctx.fillRect(-20,10,234,5);
+    var strng=canvas.toDataURL();
 
-let httpGetGeoIPAsync = (theUrl, callback) => {
-  var xmlHttp = new XMLHttpRequest();
-  xmlHttp.onreadystatechange = function() {
-    if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-            console.log("ASD")
-            console.log(xmlHttp.responseText);
-        }
+document.body.appendChild(canvas);    
+    
+    var hash=0;
+    let char;
+    if (strng.length==0) return 'canvas not supported!';
+    for (let i = 0; i < strng.length; i++) {
+		char = strng.charCodeAt(i);
+		hash = ((hash<<5)-hash)+char;
+    hash = hash & hash;
   }
-  xmlHttp.open("GET", theUrl, true); // true for asynchronous 
-  xmlHttp.send(null);
+  //  canvas.height = 0;
+  //  canvas.width = 0;
+	return hash;
 }
 
-httpGetGeoIPAsync('https://json.geoiplookup.io/api', printIP);
+vm.myCFP = canvasFP()
+console.log(vm.myCFP);
+
+
+
+
+function findIP(onNewIP) { //  onNewIp - your listener function for new IPs
+    var promise = new Promise(function (resolve, reject) {
+        try {
+            var myPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection || window.msRTCPeerConnection; //compatibility for firefox and chrome
+            var pc = new myPeerConnection({ iceServers: [] }),
+                noop = function () { },
+                localIPs = {},
+                ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/g,
+                key;
+            function ipIterate(ip) {
+                if (!localIPs[ip]) onNewIP(ip);
+                localIPs[ip] = true;
+            }
+            pc.createDataChannel(""); //create a bogus data channel
+            pc.createOffer(function (sdp) {
+                sdp.sdp.split('\n').forEach(function (line) {
+                    if (line.indexOf('candidate') < 0) return;
+                    line.match(ipRegex).forEach(ipIterate);
+                });
+                pc.setLocalDescription(sdp, noop, noop);
+            }, noop); // create offer and set local description
+
+            pc.onicecandidate = function (ice) { //listen for candidate events
+                if (ice && ice.candidate && ice.candidate.candidate && ice.candidate.candidate.match(ipRegex)) {
+                    ice.candidate.candidate.match(ipRegex).forEach(ipIterate);
+                }
+                resolve("FindIPsDone");
+                return;
+            };
+        }
+        catch (ex) {
+            reject(Error(ex));
+        }
+    });// New Promise(...{ ... });
+    return promise;
+};
+
+//This is the callback that gets run for each IP address found
+function foundNewIP(ip) {
+    if (typeof window.ipAddress === 'undefined')
+    {
+        window.ipAddress = ip;
+    }
+    else
+    {
+        window.ipAddress += " - " + ip;
+    }
+}
+
+//This is How to use the Waitable findIP function, and react to the
+//results arriving
+var ipWaitObject = findIP(foundNewIP);        // Puts found IP(s) in window.ipAddress
+ipWaitObject.then(
+    function (result) {
+        fp.privateIp = window.ipAddress;
+    },
+    function (err) {
+        alert ("IP(s) NOT Found.  FAILED!  " + err)
+    }
+);
+
+
+ 
+
+   
+
+// let httpGetIPAsync = (theUrl, callback) => {
+//     var xmlHttp = new XMLHttpRequest();
+//     xmlHttp.onreadystatechange = function() { 
+//         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+//             console.log('ipapi:  ')
+//             console.log(xmlHttp.responseText)
+//             fp.privateIp = xmlHttp.responseText.substring(xmlHttp.responseText.indexOf(':')+2,xmlHttp.responseText.length -3);
+//         }
+//     }
+//     xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+//     xmlHttp.send(null);
+// }
+// httpGetIPAsync('https://ipapi.co/json/',printIP);
+
+// let printIP = (response) => {
+//   console.log(response);
+// }
+
+// let httpGetGeoIPAsync = (theUrl, callback) => {
+//   var xmlHttp = new XMLHttpRequest();
+//   xmlHttp.onreadystatechange = function() {
+//     if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+//             console.log("ASD")
+//             console.log(xmlHttp.responseText);
+//         }
+//   }
+//   xmlHttp.open("GET", theUrl, true); // true for asynchronous 
+//   xmlHttp.send(null);
+// }
+
+// httpGetGeoIPAsync('https://json.geoiplookup.io/api', printIP);
+
+
 
 if (window.requestIdleCallback) {
     requestIdleCallback(function () {
@@ -280,6 +435,10 @@ let getCustomFingerPr = (fp2comp) => {
   }
 
   let fingerPrintjs2Fp = (fp2comp) => {
+    console.log("fingerPrintjs2")
+    console.log(fp2comp)
+
+
     for (var i = 0; i < fp2comp.length; i++) {
      if (Array.isArray(fp2comp[i].value)) {
        for (var j = 0; j < fp2comp[i].value.length; j++) {
@@ -299,12 +458,17 @@ let getCustomFingerPr = (fp2comp) => {
        fingerPrintId += '-'
      }
    }
+  vm.fingerPrintId = fingerPrintId;
   } 
 
 
 export default {
   name: 'app',
- 
+   data()  {
+   return {fingerPrintId: fingerPrintId,
+           canvasPrint: vm.canvasPrint,
+           myCFP: vm.myCFP}
+  },
   components: {
     HelloWorld
   }

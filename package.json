@@ -11,6 +11,7 @@
     "clientjs": "^0.1.11",
     "core-js": "^2.6.5",
     "fingerprintjs2": "^2.1.0",
+    "gpu.js": "^2.0.0-rc.21",
     "vue": "^2.6.10"
   },
   "devDependencies": {

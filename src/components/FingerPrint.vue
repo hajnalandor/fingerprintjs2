@@ -108,7 +108,14 @@ export default Vue.extend({
     },
     setWebgl(data) {
       data.value.forEach((element) => {
-        this.fp[element.substring(0,element.indexOf(':'))] = element.substring(element.indexOf(':') + 1, element.length); 
+        let key = element.substring(0,element.indexOf(':'));
+        let index = key.indexOf(" ");
+        while (index != -1) {
+          key = key.replace(" ","");
+          key = key.substring(0,index) + key.charAt(index).toUpperCase() + key.substring(index+1,key.length);
+          index = key.indexOf(" ");
+        }
+        this.fp[key] = element.substring(element.indexOf(':') + 1, element.length); 
       });
     },
     setClientJsComponents() {

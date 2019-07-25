@@ -176,7 +176,7 @@ export default Vue.extend({
 ​
 <template>
 <div>
-  <p>Valami</p>
+  <p>Data:</p>
   <p>{{fingerPrintId}}</p>
   <p>{{fp}}</p>
 </div>

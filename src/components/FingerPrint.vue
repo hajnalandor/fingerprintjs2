@@ -149,7 +149,7 @@ export default Vue.extend({
     },
     setBrowserInformation() {
       this.fp['browserData'] = client.getBrowserData();
-      this.fp['BrowserMajorVersion'] = client.getBrowserMajorVersion();
+      this.fp['browserMajorVersion'] = client.getBrowserMajorVersion();
       this.fp['browser'] = client.getBrowser();
       this.fp['browserVersion'] = client.getBrowserVersion();
     },
@@ -171,12 +171,11 @@ export default Vue.extend({
 </script>
 ​
 <style>
-  
+  p { word-break: break-all }
 </style>
 ​
 <template>
 <div>
-  <p>Data:</p>
   <p>{{fingerPrintId}}</p>
   <p>{{fp}}</p>
 </div>

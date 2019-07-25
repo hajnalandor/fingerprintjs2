@@ -1,89 +1,45 @@
 <script lang="ts">
 var start = new Date().getTime();
 import Vue from 'vue';
-import ClientJS from 'clientjs';
+import'clientjs';
 import Fingerprint2 from 'fingerprintjs2';
 
-let client = new ClientJS();
-​// declare var window : any;
+const client = new ClientJS();
+// var fingerPrintId = '';
+// var fp = {};
  
 export default Vue.extend({
   name: 'BrowserFinterprint',
   data () {    
     return {
-      tmp: ''
+      fingerPrintId: '',
+      fp: {}
     }
   },
+  created() {
+    init();
+  },
   methods: {
-    // init() {
-    //   return init();
-    // },
-    canvasFP() {
-      return canvasFP();
-    },
     getCustomFingerPr() {
       return getCustomFingerPr(this.fp2comp);
     },
     getFingerPrintJson() {
-      return getCustomFingerPr(this.fp2comp);
+      return buildfp(this.fp2comp);
     }
   }
   
 })
 
-
-
-
-var fingerPrintId = '';
-var fp = {};
-
-let canvasFP = () => {
-    var canvas = document.createElement('canvas');
-    var ctx = canvas.getContext('2d');
-    var txt = 'i9asdm..$#po((^@KbXrww!~cz|?#$%^<&*`I9ASDM..$#PO((^@kBxRWW!~CZ|?#$%^';
-    ctx.textBaseline = "top";
-    ctx.font = "25px 'Arial'";
-    ctx.textBaseline = "alphabetic";
-    ctx.rotate(.05);
-    ctx.fillStyle = "#f60";
-    ctx.fillRect(125,1,62,20);
-    ctx.fillStyle = "#069";
-    ctx.fillText(txt, 2, 15);
-    ctx.fillStyle = "rgba(102, 200, 0, 0.7)";
-    ctx.fillText(txt, 4, 17);
-    ctx.shadowBlur=10;
-    ctx.shadowColor="blue";
-    ctx.fillRect(-20,10,234,5);
-    var strng=canvas.toDataURL();
-
-    document.body.appendChild(canvas);    
-    
-    var hash=0;
-    let char;
-    if (strng.length==0) return 'canvas not supported!';
-    for (let i = 0; i < strng.length; i++) {
-		char = strng.charCodeAt(i);
-		hash = ((hash<<5)-hash)+char;
-    hash = hash & hash;
-  }
-  //  canvas.height = 0;
-  //  canvas.width = 0;
-	return hash;
+let init = () => {
+  setTimeout(() => {
+    Fingerprint2.get((components) => {
+      getCustomFingerPr(components);
+      buildfp(components);
+      console.log(components);
+      console.log(fp);
+    })
+  },500)
 }
-
-let myCFP = canvasFP()
-console.log(myCFP);
-
-// let init = () => {
-//   if (!window.requestIdleCallback) {
-//     setTimeout(() => {
-//       Fingerprint2.get((components) => {
-//         getCustomFingerPr(components);
-//         buildfp(components);
-//       })
-//     },500)
-//   }
-// }
 
 let setAvailableScreenResolutin = (data) => {
    fp['availableScreenResolutionWidth'] = data.value[1];
@@ -135,15 +91,8 @@ let buildfp = (fp2comp) => {
     }
   });
   setClientJsComponents();
-  setIncognitoInformation();
   console.log(fp)
 }
-
-let setIncognitoInformation = () => {
-   isPrivateMode().then(function (isPrivate) {
-  fp['isPrivate'] = isPrivate;
-  })
-};
 
 let setClientJsComponents = () => {
   fp['currentResolution'] = client.getCurrentResolution();
@@ -204,6 +153,7 @@ let setMobileInformations = () => {
   fp['mobile'] = mobile;
 };
 
+
 // fp2comp == fingerPrintjs2 components
 let getCustomFingerPr = (fp2comp) => {
     clientJsFp();
@@ -215,6 +165,7 @@ let getCustomFingerPr = (fp2comp) => {
     fingerPrintId = btoa(fingerPrintId)
     console.log("time in millisec:  "+(end-start))
   }
+
 
   let clientJsFp = () => {
     fingerPrintId = client.getFingerprint()+'-'
@@ -257,63 +208,6 @@ let getCustomFingerPr = (fp2comp) => {
      }
    }
   } 
-
-// let isPrivateMode = function() {
-//   return new Promise((resolve) => {
-//     const yes = () => resolve(true); // is in private mode
-//     const not = () => resolve(false); // not in private mode
-//     const testLocalStorage = () => {
-//       try {
-//         if (localStorage.length) not();
-//         else {
-//           localStorage.x = 1;
-//           localStorage.removeItem('x');
-//           not();
-//         }
-//       } catch (e) {
-//         // Safari only enables cookie in private mode
-//         // if cookie is disabled, then all client side storage is disabled
-//         // if all client side storage is disabled, then there is no point
-//         // in using private mode
-//         navigator.cookieEnabled ? yes() : not();
-//       }
-//     };
-    
-    // Chrome & Opera
-//     var fs = window.webkitRequestFileSystem || window.RequestFileSystem;
-//     if (fs) {
-//       return void fs(window.TEMPORARY, 100, not, yes);
-//     }
-//     // Firefox
-//     if ('MozAppearance' in document.documentElement.style) {
-//       if (indexedDB === null) return yes();
-//       const db = indexedDB.open('test');
-//       db.onerror = yes;
-//       db.onsuccess = not;
-//       return void 0;
-//     }
-//     // Safari
-//     const isSafari = navigator.userAgent.match(/Version\/([0-9\._]+).*Safari/);
-//     if (isSafari) {
-//       const version = parseInt(isSafari[1], 10);
-//       if (version < 11) return testLocalStorage();
-//       try {
-//         window.openDatabase(null, null, null, null);
-//         return not();
-//       } catch (_) {
-//         return yes();
-//       }
-//     }
-//     // IE10+ & Edge InPrivate
-//     if (!window.indexedDB && (window.PointerEvent || window.MSPointerEvent)) {
-//       return yes();
-//     }
-//     // default navigation mode
-//     return not();
-//   });
-// }
-  
-
 </script>
 ​
 <style>

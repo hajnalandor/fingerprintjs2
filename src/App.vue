@@ -458,17 +458,12 @@
 //   } 
 
 
-// export default {
-//   name: 'app',
-//    data()  {
-//    return {fingerPrintId: fingerPrintId,
-//            canvasPrint: vm.canvasPrint,
-//            myCFP: vm.myCFP}
-//   },
-//   components: {
-//     HelloWorld
-//   }
-// }
+export default {
+  name: 'app',
+  components: {
+    FingerPrint
+  }
+}
 
 </script>
 

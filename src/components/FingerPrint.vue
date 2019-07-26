@@ -1,6 +1,6 @@
 <script lang="ts">
 import Vue from 'vue';
-import'clientjs';
+import ClientJS from 'clientjs';
 import Fingerprint2 from 'fingerprintjs2';
 // @TODO addblock is not in fingerprint
 const client = new ClientJS();
@@ -25,14 +25,14 @@ export default Vue.extend({
         })
       },500)
     },
-    getCustomFingerPr(fp2comp) {
-      this.clientJsFp();
-      this.fingerPrintjs2Fp(fp2comp);   
+    getCustomFingerPr(fp2components) {
+      this.clientJsFingerprint();
+      this.fingerPrint2jsFingerprint(fp2components);   
       this.fingerPrintId = btoa(this.fingerPrintId)
      },
-    buildfp(fp2comp) {
+    buildfp(fp2components) {
       this.fp['fingerPrintId'] = this.fingerPrintId;
-      fp2comp.forEach((data) => {
+      fp2components.forEach((data) => {
         if (data.key == 'availableScreenResolution') {
           this.setAvailableScreenResolutin(data);
         } else if (data.key == 'screenResolution') {
@@ -48,9 +48,8 @@ export default Vue.extend({
         }
       });
       this.setClientJsComponents();
-      console.log(this.fp)
     },
-    clientJsFp() {
+    clientJsFingerprint() {
       this.fingerPrintId = client.getFingerprint()+'-'
       this.fingerPrintId += client.getCustomFingerprint(client.getTimeZone()) + '-'
       this.fingerPrintId += client.getCustomFingerprint(client.getLanguage()) + '-'
@@ -64,7 +63,7 @@ export default Vue.extend({
       this.fingerPrintId += client.getCustomFingerprint(client.getScreenPrint()) + '-'
       this.fingerPrintId += client.getCustomFingerprint(client.isJava(),client.isFlash(),client.getFlashVersion()) + '-' 
     },
-    fingerPrintjs2Fp(fp2comp) {
+    fingerPrint2jsFingerprint(fp2comp) {
       for (var i = 0; i < fp2comp.length; i++) {
         if (Array.isArray(fp2comp[i].value)) {
         for (var j = 0; j < fp2comp[i].value.length; j++) {
@@ -174,13 +173,10 @@ export default Vue.extend({
     }
   } 
 })
-
 </script>
-​
 <style>
   p { word-break: break-all }
 </style>
-​
 <template>
 <div>
   <p>{{fingerPrintId}}</p>

@@ -1,6 +1,6 @@
 <script lang="ts">
 import Vue from 'vue';
-import ClientJS from 'clientjs';
+import'clientjs';
 import Fingerprint2 from 'fingerprintjs2';
 // @TODO addblock is not in fingerprint
 const client = new ClientJS();
@@ -48,6 +48,7 @@ export default Vue.extend({
         }
       });
       this.setClientJsComponents();
+
     },
     clientJsFingerprint() {
       this.fingerPrintId = client.getFingerprint()+'-'

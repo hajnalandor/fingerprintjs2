@@ -39,7 +39,7 @@ export interface Fingerprint {
   language: string
   localStorage: boolean
   mimeType: string
-  //mobile
+  mobile: Mobile
   openDatabase: boolean
   os: string
   osVersion: string
@@ -149,4 +149,5 @@ export interface Mobile {
   isIpad: boolean
   isIpod: boolean
 }
+
 

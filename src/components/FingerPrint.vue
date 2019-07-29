@@ -2,6 +2,7 @@
 import Vue from 'vue';
 import'clientjs';
 import Fingerprint2 from 'fingerprintjs2';
+
 // @TODO addblock is not in fingerprint
 const client = new ClientJS();
 export default Vue.extend({

@@ -3,12 +3,14 @@
    
     <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
     <FingerPrint />
+    <SocialFingerprint />
 
   </div>
 </template>
 
 <script>
  import FingerPrint from './components/FingerPrint'
+ import SocialFingerprint from './components/SocialFingerprint'
 // import Vue from 'vue';
 
 // let vm = new Vue({
@@ -461,7 +463,8 @@
 export default {
   name: 'app',
   components: {
-    FingerPrint
+    FingerPrint,
+    SocialFingerprint
   }
 }
 

@@ -15,7 +15,6 @@ export default {
     console.log(fingerprint.fp);
   }
 }
-
 </script>
 
 

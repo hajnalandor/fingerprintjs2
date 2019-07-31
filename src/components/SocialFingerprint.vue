@@ -68,7 +68,7 @@ var leakSocialMediaAccounts = function() {
         domain: "https://login.skype.com",
         redirect: "/login?message=signin_continue&redirect_uri=https%3A%2F%2Fsecure.skype.com%2Ffavicon.ico",
         name: "Skype"
-    }, {
+    }, { //OK
         domain: "https://www.spotify.com",
         redirect: "/en/login/?forward_url=https%3A%2F%2Fwww.spotify.com%2Ffavicon.ico",
         name: "Spotify"

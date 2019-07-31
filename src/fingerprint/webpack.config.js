@@ -2,13 +2,21 @@ const path = require('path');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
-  mode: 'production',
   entry: {
-    'fingerprint': './index.ts',
-    'fingerprint.min': './index.ts'
+    'fingerprint': './createFP.ts',
+    'fingerprint.min': './createFP.ts'
   },
   resolve: {
     extensions: ['.ts', '.js']
+  },
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        loader: 'ts-loader',
+        exclude: /node-modules/
+      }
+    ]
   },
   optimization: {
     splitChunks: {

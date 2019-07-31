@@ -1,14 +1,14 @@
 import {Fingerprint, Mobile,Canvas} from './fingerprint';
 
-import 'clientjs';
+import ClientJS from 'clientjs'
 import * as Fingerprint2 from 'fingerprintjs2';
 //Fingerprint2 from 
 // @TODO addblock is not in fingerprint
 export default class CreateFingerprint{
 
-private client = new ClientJS();
-public fingerprintId: string;
-public fp: Fingerprint = {
+  private client = new ClientJS();
+  public fingerprintId: string;
+  public fp: Fingerprint = {
     adBlock : '',
     addBehavior : undefined,
     audio : undefined,
@@ -146,13 +146,16 @@ public fp: Fingerprint = {
     webglVertexShaderMediumIntPrecision : undefined,
     webglVertexShaderMediumIntPrecisionRangeMax : undefined,
     webglVertexShaderMediumIntPrecisionRangeMin : undefined
-}; 
+  }; 
 
   constructor() {
     this.fingerprintId = '';
-    this.generateFingerprint();
   }
-
+  
+  public getBrowserFingerprint(): Fingerprint {
+    this.generateFingerprint();
+    return this.fp;
+  }
 
   public generateFingerprint(): void {
       Fingerprint2.get((components: any[]) => {
@@ -194,12 +197,12 @@ public fp: Fingerprint = {
     this.fingerprintId += this.client.getCustomFingerprint(this.client.getEngine(),this.client.getBrowser(),this.client.getBrowserVersion()) + '-'
     this.fingerprintId += this.client.getCustomFingerprint(this.client.getDevice(), this.client.getDeviceType())+ '-'
     this.fingerprintId += this.client.getCustomFingerprint(this.client.getCPU()) + '-'
-    this.fingerprintId += this.client.getCustomFingerprint(this.client.getOS,this.client.getOSVersion(),this.client.getSystemLanguage()) + '-'
-    this.fingerprintId += this.client.getCustomFingerprint(this.client.isWindows(),this.client.isMac(), this.client.isLinux(),this.client.isUbuntu(),this.client.isSolaris()) + '-'
-    this.fingerprintId += this.client.getCustomFingerprint(this.client.isChrome(),this.client.isSafari(),this.client.isMobileSafari(),this.client.isOpera()) + '-'
-    this.fingerprintId += this.client.getCustomFingerprint(this.client.isMobile(),this.client.isMobileMajor(),this.client.isMobileAndroid(),this.client.isMobileOpera(),this.client.isMobileWindows(),this.client.isMobileBlackBerry()) + '-'
+    this.fingerprintId += this.client.getCustomFingerprint(this.client.getOS.toString(),this.client.getOSVersion(),this.client.getSystemLanguage()) + '-'
+    this.fingerprintId += this.client.getCustomFingerprint(this.client.isWindows().toString(),this.client.isMac().toString(), this.client.isLinux().toString(),this.client.isUbuntu().toString(),this.client.isSolaris().toString()) + '-'
+    this.fingerprintId += this.client.getCustomFingerprint(this.client.isChrome().toString(),this.client.isSafari().toString(),this.client.isMobileSafari().toString(),this.client.isOpera().toString()) + '-'
+    this.fingerprintId += this.client.getCustomFingerprint(this.client.isMobile().toString(),this.client.isMobileMajor().toString(),this.client.isMobileAndroid().toString(),this.client.isMobileOpera().toString(),this.client.isMobileWindows().toString(),this.client.isMobileBlackBerry().toString()) + '-'
     this.fingerprintId += this.client.getCustomFingerprint(this.client.getScreenPrint()) + '-'
-    this.fingerprintId += this.client.getCustomFingerprint(this.client.isJava(),this.client.isFlash(),this.client.getFlashVersion()) + '-' 
+    this.fingerprintId += this.client.getCustomFingerprint(this.client.isJava().toString(),this.client.isFlash().toString(),this.client.getFlashVersion()) + '-' 
   }
    
   public fingerPrint2jsFingerprint(fp2comp: any[]): void {
@@ -314,7 +317,8 @@ public fp: Fingerprint = {
     }
 
     public setBrowserInformation(): void {
-      this.fp['browserData'] = this.client.getBrowserData();
+      // @TODO Property 'getBrowserData' does not exist on type 'ClientJS'
+      //this.fp['browserData'] = this.client.getBrowserData();
       this.fp['browserMajorVersion'] = this.client.getBrowserMajorVersion();
       this.fp['browser'] = this.client.getBrowser();
       this.fp['browserVersion'] = this.client.getBrowserVersion();

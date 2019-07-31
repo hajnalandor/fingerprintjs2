@@ -121,7 +121,7 @@ export interface Fingerprint {
   webglVertexShaderMediumIntPrecision? : string
   webglVertexShaderMediumIntPrecisionRangeMax? : string
   webglVertexShaderMediumIntPrecisionRangeMin? : string
-  [key: string] : any
+  [key: string] : any|string|number|boolean
 }
 
 export interface BrowserData {

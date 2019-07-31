@@ -1,6 +1,6 @@
 import {Fingerprint, Mobile,Canvas} from './fingerprint';
 
-import ClientJS from 'clientjs'
+import 'clientjs'
 import * as Fingerprint2 from 'fingerprintjs2';
 //Fingerprint2 from 
 // @TODO addblock is not in fingerprint
@@ -158,10 +158,13 @@ export default class CreateFingerprint{
   }
 
   public generateFingerprint(): void {
+    setTimeout(() => {
       Fingerprint2.get((components: any[]) => {
       this.getCustomFingerPr(components);
       this.buildfp(components);
       })
+    },500)
+    console.log(this.fp);
   }
 
   public getCustomFingerPr(fp2components: any[]): void {

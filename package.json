@@ -4,7 +4,10 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "docs": "vue-cli-service build",
+    "library": "rm -r dist && cd ./src/fingerprint && webpack && cd ../../",
+    "cleanDist": "rm dist/fingerprint.min.js && rm dist/fingerprint.js",
+    "build": "vue-cli-service build && npm run library",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {

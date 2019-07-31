@@ -12,6 +12,7 @@ export default {
   },
   mounted() {
     const fingerprint = new CreateFingerprint();
+    fingerprint.generateFingerprint();
     console.log(fingerprint.fp);
   }
 }

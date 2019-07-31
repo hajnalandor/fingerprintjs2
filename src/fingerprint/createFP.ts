@@ -152,7 +152,7 @@ export default class CreateFingerprint{
     this.fingerprintId = '';
   }
   
-  public getBrowserFingerprint(): Fingerprint {
+  public create(): Fingerprint {
     this.generateFingerprint();
     return this.fp;
   }

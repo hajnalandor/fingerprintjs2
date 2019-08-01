@@ -1,17 +1,14 @@
-import {Fingerprint, Mobile,Canvas} from './fingerprint';
+import {FPInterface, Mobile,Canvas} from './fingerprint';
 
 import 'clientjs'
 import * as Fingerprint2 from 'fingerprintjs2';
 
-// export {CreateFingerprint}
-
-//Fingerprint2 from 
-// @TODO addblock is not in fingerprint
-export default class CreateFingerprint{
+// @TODO addblock is not in fingerprint because in Chrome incognito is not enabled by default
+export default class Fingerprint {
 
   private client = new ClientJS();
   public fingerprintId: string;
-  public fp: Fingerprint = {
+  public fp: FPInterface = {
     adBlock : '',
     addBehavior : undefined,
     audio : undefined,
@@ -155,7 +152,7 @@ export default class CreateFingerprint{
     this.fingerprintId = '';
   }
   
-  public create(): Fingerprint {
+  public create(): FPInterface {
     this.generateFingerprint();
     return this.fp;
   }
@@ -230,118 +227,118 @@ export default class CreateFingerprint{
       }
     }
   }
-    public setAvailableScreenResolutin(data: any): void {
-      this.fp['availableScreenResolutionWidth'] = data.value[1];
-      this.fp['availableScreenResolutionHeight'] = data.value[0];
-    }
-    public setScreenResolution(data: any): void {
-      this.fp['screenResolutionWidth'] = data.value[1];
-      this.fp['screenResolutionHeight'] = data.value[0];
-    }
+    
+  public setAvailableScreenResolutin(data: any): void {
+    this.fp['availableScreenResolutionWidth'] = data.value[1];
+    this.fp['availableScreenResolutionHeight'] = data.value[0];
+  }
+    
+  public setScreenResolution(data: any): void {
+    this.fp['screenResolutionWidth'] = data.value[1];
+    this.fp['screenResolutionHeight'] = data.value[0];
+  }
 
-    public setCanvas(data: any): void {
-      var canvas : Canvas = {
-        canvasWinding : undefined,
-        canvasFp : undefined
-      };
-      data.value.forEach((canvasElement: string) => {
-        canvas[canvasElement.substring(0,canvasElement.indexOf(':'))] = canvasElement.substring(canvasElement.indexOf(':') + 1, canvasElement.length);
-      });
-      this.fp['canvas'] = canvas;
-    }
+  public setCanvas(data: any): void {
+    var canvas : Canvas = {
+      canvasWinding : undefined,
+      canvasFp : undefined
+    };
+    data.value.forEach((canvasElement: string) => {
+      canvas[canvasElement.substring(0,canvasElement.indexOf(':'))] = canvasElement.substring(canvasElement.indexOf(':') + 1, canvasElement.length);
+    });
+    this.fp['canvas'] = canvas;
+  }
 
-    public setPlugins(data: any): void {
-      var plugins : string[] = [];
-      data.value.forEach((element: any) => {
-        plugins.push(element[0]);
-      });
-      this.fp['plugins'] = plugins;
-    }
+  public setPlugins(data: any): void {
+    var plugins : string[] = [];
+    data.value.forEach((element: any) => {
+      plugins.push(element[0]);
+    });
+    this.fp['plugins'] = plugins;
+  }
 
-    public setWebgl(data: any): void {
-      data.value.forEach((element: string) => {
-        let key = element.substring(0,element.indexOf(':'));
-        let index = key.indexOf(" ");
-        while (index != -1) {
-          key = key.replace(" ","");
-          key = key.substring(0,index) + key.charAt(index).toUpperCase() + key.substring(index+1,key.length);
-          index = key.indexOf(" ");
-        }
-        this.fp[key] = element.substring(element.indexOf(':') + 1, element.length); 
-      });
-    }
+  public setWebgl(data: any): void {
+    data.value.forEach((element: string) => {
+      let key = element.substring(0,element.indexOf(':'));
+      let index = key.indexOf(" ");
+      while (index != -1) {
+        key = key.replace(" ","");
+        key = key.substring(0,index) + key.charAt(index).toUpperCase() + key.substring(index+1,key.length);
+        index = key.indexOf(" ");
+      }
+      this.fp[key] = element.substring(element.indexOf(':') + 1, element.length); 
+    });
+  }
 
-    public setClientJsComponents(): void {
-      this.fp['currentResolution'] = this.client.getCurrentResolution();
-      this.fp['timeZoneAbbreviation'] = this.client.getTimeZone();
-      this.fp['engine'] = this.client.getEngine();
-      this.fp['engineVersion'] = this.client.getEngineVersion();
-      this.fp['cpu'] = this.client.getCPU();
-      this.fp['os'] = this.client.getOS();
-      this.fp['osVersion'] = this.client.getOSVersion();
-      this.fp['systemLanguage'] = this.client.getSystemLanguage();
-      this.fp['getSoftwareVersion'] = this.client.getSoftwareVersion();
-      this.fp['silverlight'] = this.client.isSilverlight();
-      this.fp['silverlightVersion'] = this.client.getSilverlightVersion();
-      this.fp['mimeType'] = this.client.getMimeTypes();
-      this.fp['ismimeType'] = this.client.isMimeTypes();
-      this.fp['canvasPrint'] = this.client.getCanvasPrint();
-      this.setMobileInformations();
-      this.setBrowserInformation();
-      this.setDeviceInformation();
-      this.setFlashAndJava();
-    }
+  public setClientJsComponents(): void {
+    this.fp['currentResolution'] = this.client.getCurrentResolution();
+    this.fp['timeZoneAbbreviation'] = this.client.getTimeZone();
+    this.fp['engine'] = this.client.getEngine();
+    this.fp['engineVersion'] = this.client.getEngineVersion();
+    this.fp['cpu'] = this.client.getCPU();
+    this.fp['os'] = this.client.getOS();
+    this.fp['osVersion'] = this.client.getOSVersion();
+    this.fp['systemLanguage'] = this.client.getSystemLanguage();
+    this.fp['getSoftwareVersion'] = this.client.getSoftwareVersion();
+    this.fp['silverlight'] = this.client.isSilverlight();
+    this.fp['silverlightVersion'] = this.client.getSilverlightVersion();
+    this.fp['mimeType'] = this.client.getMimeTypes();
+    this.fp['ismimeType'] = this.client.isMimeTypes();
+    this.fp['canvasPrint'] = this.client.getCanvasPrint();
+    this.setMobileInformations();
+    this.setBrowserInformation();
+    this.setDeviceInformation();
+    this.setFlashAndJava();
+  }
 
-    public setMobileInformations(): void {
-      var mobile :Mobile = {
-        isMobile : undefined,
-        isMobileSafari : undefined,
-        isMobileMajor : undefined,
-        isMobileAndroid : undefined,
-        isMobileOpera : undefined,
-        isMobileWindows : undefined,
-        isMobileBlackBerry : undefined,
-        isMobileIOS : undefined,
-        isIphone : undefined,
-        isIpad : undefined,
-        isIpod : undefined
-      };
-      mobile['isMobileSafari'] = this.client.isMobileSafari();
-      mobile['isMobile'] = this.client.isMobile();
-      mobile['isMobileMajor'] = this.client.isMobileMajor();
-      mobile['isMobileAndroid'] = this.client.isMobileAndroid();
-      mobile['isMobileOpera'] = this.client.isMobileOpera();
-      mobile['isMobileWindows'] = this.client.isMobileWindows();
-      mobile['isMobileBlackBerry'] = this.client.isMobileBlackBerry();
-      mobile['isMobileIOS'] = this.client.isMobileIOS();
-      mobile['isIphone'] = this.client.isIphone();
-      mobile['isIpad'] = this.client.isIpad();
-      mobile['isIpod'] = this.client.isIpod();
+  public setMobileInformations(): void {
+    var mobile :Mobile = {
+      isMobile : undefined,
+      isMobileSafari : undefined,
+      isMobileMajor : undefined,
+      isMobileAndroid : undefined,
+      isMobileOpera : undefined,
+      isMobileWindows : undefined,
+      isMobileBlackBerry : undefined,
+      isMobileIOS : undefined,
+      isIphone : undefined,
+      isIpad : undefined,
+      isIpod : undefined
+    };
+    
+    mobile['isMobileSafari'] = this.client.isMobileSafari();
+    mobile['isMobile'] = this.client.isMobile();
+    mobile['isMobileMajor'] = this.client.isMobileMajor();
+    mobile['isMobileAndroid'] = this.client.isMobileAndroid();
+    mobile['isMobileOpera'] = this.client.isMobileOpera();
+    mobile['isMobileWindows'] = this.client.isMobileWindows();
+    mobile['isMobileBlackBerry'] = this.client.isMobileBlackBerry();
+    mobile['isMobileIOS'] = this.client.isMobileIOS();
+    mobile['isIphone'] = this.client.isIphone();
+    mobile['isIpad'] = this.client.isIpad();
+    mobile['isIpod'] = this.client.isIpod();
 
-      this.fp['mobile'] = mobile;
-    }
+    this.fp['mobile'] = mobile;
+  }
 
-    public setBrowserInformation(): void {
-      // @TODO Property 'getBrowserData' does not exist on type 'ClientJS'
-      //this.fp['browserData'] = this.client.getBrowserData();
-      this.fp['browserMajorVersion'] = this.client.getBrowserMajorVersion();
-      this.fp['browser'] = this.client.getBrowser();
-      this.fp['browserVersion'] = this.client.getBrowserVersion();
-    }
+  public setBrowserInformation(): void {
+    this.fp['browserMajorVersion'] = this.client.getBrowserMajorVersion();
+    this.fp['browser'] = this.client.getBrowser();
+    this.fp['browserVersion'] = this.client.getBrowserVersion();
+  }
 
-    public setDeviceInformation(): void {
-      this.fp['device'] = this.client.getDevice();
-      this.fp['deviceType'] = this.client.getDeviceType();
-      this.fp['deviceVendor'] = this.client.getDeviceVendor();
-      this.fp['deviceType'] = this.client.getDeviceType();
-    }
+  public setDeviceInformation(): void {
+    this.fp['device'] = this.client.getDevice();
+    this.fp['deviceType'] = this.client.getDeviceType();
+    this.fp['deviceVendor'] = this.client.getDeviceVendor();
+    this.fp['deviceType'] = this.client.getDeviceType();
+  }
 
-    public setFlashAndJava(): void {
-      this.fp['java'] = this.client.isJava();
-      this.fp['javaVersion'] = this.client.getJavaVersion();
-      this.fp['flash'] = this.client.isFlash();
-      this.fp['flashVersion'] = this.client.getFlashVersion();
-    }
-  
+  public setFlashAndJava(): void {
+    this.fp['java'] = this.client.isJava();
+    this.fp['javaVersion'] = this.client.getJavaVersion();
+    this.fp['flash'] = this.client.isFlash();
+    this.fp['flashVersion'] = this.client.getFlashVersion();
+  }
 }
 

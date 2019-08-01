@@ -5,15 +5,14 @@
 </template>
 
 <script lang="ts">
-import CreateFingerprint from './fingerprint/createFP';
+import Fingerprint from './fingerprint/createFP';
 export default {
   name: 'app',
   components: {
   },
   mounted() {
-    const fingerprint = new CreateFingerprint();
-    fingerprint.generateFingerprint();
-    console.log(fingerprint.fp);
+    const fingerprint = new Fingerprint();
+    console.log(fingerprint.create());
   }
 }
 </script>

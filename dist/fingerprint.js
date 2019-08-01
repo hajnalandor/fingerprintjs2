@@ -120,7 +120,6 @@ var Fingerprint = (function () {
             availableScreenResolutionHeight: undefined,
             availableScreenResolutionWidth: undefined,
             browser: undefined,
-            browserData: undefined,
             browserMajorVersion: undefined,
             browserVersion: undefined,
             canvas: {
@@ -260,12 +259,10 @@ var Fingerprint = (function () {
     };
     Fingerprint.prototype.generateFingerprint = function () {
         var _this = this;
-        setTimeout(function () {
-            Fingerprint2.get(function (components) {
-                _this.getCustomFingerPr(components);
-                _this.buildfp(components);
-            });
-        }, 500);
+        Fingerprint2.get(function (components) {
+            _this.getCustomFingerPr(components);
+            _this.buildfp(components);
+        });
     };
     Fingerprint.prototype.getCustomFingerPr = function (fp2components) {
         this.clientJsFingerprint();
@@ -346,7 +343,12 @@ var Fingerprint = (function () {
             canvasFp: undefined
         };
         data.value.forEach(function (canvasElement) {
-            canvas[canvasElement.substring(0, canvasElement.indexOf(':'))] = canvasElement.substring(canvasElement.indexOf(':') + 1, canvasElement.length);
+            if (canvasElement.substring(0, canvasElement.indexOf(':')) === 'canvas fp') {
+                canvas['canvasFp'] = canvasElement.substring(canvasElement.indexOf(':') + 1, canvasElement.length);
+            }
+            else if (canvasElement.substring(0, canvasElement.indexOf(':')) === 'canvas winding') {
+                canvas['canvasWinding'] = canvasElement.substring(canvasElement.indexOf(':') + 1, canvasElement.length);
+            }
         });
         this.fp['canvas'] = canvas;
     };

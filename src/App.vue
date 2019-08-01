@@ -1,4 +1,5 @@
 <template>
+  
   <div id="app">
    
   </div>
@@ -6,6 +7,7 @@
 
 <script lang="ts">
 import Fingerprint from './fingerprint/createFP';
+
 export default {
   name: 'app',
   components: {

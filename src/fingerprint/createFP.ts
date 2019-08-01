@@ -15,7 +15,6 @@ export default class Fingerprint {
     availableScreenResolutionHeight : undefined,
     availableScreenResolutionWidth : undefined,
     browser : undefined,
-    browserData : undefined,
     browserMajorVersion : undefined,
     browserVersion : undefined,
     canvas : {
@@ -158,12 +157,10 @@ export default class Fingerprint {
   }
 
   public generateFingerprint(): void {
-    setTimeout(() => {
       Fingerprint2.get((components: any[]) => {
       this.getCustomFingerPr(components);
       this.buildfp(components);
-      })
-    },500)
+      });
   }
 
   public getCustomFingerPr(fp2components: any[]): void {
@@ -213,7 +210,7 @@ export default class Fingerprint {
         for (var j = 0; j < fp2comp[i].value.length; j++) {
           this.fingerprintId += this.client.getCustomFingerprint(fp2comp[i].value[j])
           if (j < fp2comp[i].value.length - 1) {
-            this.fingerprintId += '-'
+            this.fingerprintId += '-';
           }
         }
       } else {
@@ -223,7 +220,7 @@ export default class Fingerprint {
         this.fingerprintId += this.client.getCustomFingerprint(fp2comp[i].value) 
         }
       if (i < fp2comp.length - 1) {
-        this.fingerprintId += '-'
+        this.fingerprintId += '-';
       }
     }
   }
@@ -244,7 +241,11 @@ export default class Fingerprint {
       canvasFp : undefined
     };
     data.value.forEach((canvasElement: string) => {
-      canvas[canvasElement.substring(0,canvasElement.indexOf(':'))] = canvasElement.substring(canvasElement.indexOf(':') + 1, canvasElement.length);
+      if (canvasElement.substring(0,canvasElement.indexOf(':')) === 'canvas fp') {
+        canvas['canvasFp'] = canvasElement.substring(canvasElement.indexOf(':') + 1, canvasElement.length);
+      } else if (canvasElement.substring(0,canvasElement.indexOf(':')) === 'canvas winding') {
+        canvas['canvasWinding'] = canvasElement.substring(canvasElement.indexOf(':') + 1, canvasElement.length);
+      }
     });
     this.fp['canvas'] = canvas;
   }

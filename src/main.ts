@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import App from './App.vue';
-import '@/fingerprint/createFP'
+import '@/fingerprint/createFP';
 Vue.config.productionTip = false;
 
 new Vue({

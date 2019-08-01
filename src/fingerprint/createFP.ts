@@ -167,7 +167,6 @@ export default class CreateFingerprint{
       this.buildfp(components);
       })
     },500)
-    console.log(this.fp);
   }
 
   public getCustomFingerPr(fp2components: any[]): void {

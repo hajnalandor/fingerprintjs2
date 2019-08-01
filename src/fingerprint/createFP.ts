@@ -2,6 +2,9 @@ import {Fingerprint, Mobile,Canvas} from './fingerprint';
 
 import 'clientjs'
 import * as Fingerprint2 from 'fingerprintjs2';
+
+// export {CreateFingerprint}
+
 //Fingerprint2 from 
 // @TODO addblock is not in fingerprint
 export default class CreateFingerprint{
@@ -342,3 +345,4 @@ export default class CreateFingerprint{
     }
   
 }
+

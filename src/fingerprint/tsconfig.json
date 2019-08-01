@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "allowUmdGlobalAccess": true,
     "strict": true,  // Enable all strict type-checking options.
     "declaration": true, /* Generates corresponding '.d.ts' file. */
     "outDir": "../../dist", // Output to dist folder

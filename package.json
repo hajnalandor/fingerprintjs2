@@ -1,6 +1,7 @@
 {
-  "name": "fingerprint",
+  "name": "@hajnalandor/browser-fingerprint",
   "version": "0.1.0",
+  "description": "Browser fingerprinting library based on fingerprint2js and clientjs. ",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
